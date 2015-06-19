@@ -1,5 +1,4 @@
 class Heuristic:
-
   def __init__(self, color):
     self.color = color
 
@@ -8,7 +7,7 @@ class Heuristic:
 
   def eval(self, vector):
     raise NotImplementedError('Dont override this class')
-    
+
 
 class Minimax:
   def __init__(self, me, challenger):
@@ -26,3 +25,9 @@ class Minimax:
       return self.me.eval(vector_values)
     else:
       return self.challenger.eval(vector_values)
+
+  def change_color(self):
+    if color == self.me.color:
+      return self.challenger.color
+    else:
+      return self.me.color
