@@ -1,6 +1,9 @@
 class HeuristicPlayer:
   BLACK, WHITE = '@', 'o'
 
+  #SETAR O VALOR DE INFINITO E DE -INFINITO
+  INF, NINF = 1000,-1000
+
   #IMPLEMENTAR
   def evalMe(self, old_value, new_value):
     #Lembre-se, uma heuristica tem que ser min, e o outro deve ser max
@@ -16,6 +19,7 @@ class HeuristicPlayer:
     return 1
 
   def __init__(self, color):
+    self.color = color
     self.color_me = color
 
     if color == HeuristicPlayer.BLACK:
@@ -25,7 +29,7 @@ class HeuristicPlayer:
 
   def play(self, board):
     depth = 5
-    return self.minimax.call_minimax(board, depth);
+    return self.call_minimax(board, depth)
 
   def call_minimax(self, board, depth):
     if depth <= 0:
@@ -60,23 +64,24 @@ class HeuristicPlayer:
 
   # Depth nao pode ser <= 0
   # Retorna (valor_heuristico, movimento)
-  # TODO: Pensar para situacao quando nao tem jogada
-  # TODO: Pensar para o caso de encontrar a vitoria antes de terminar a profundidade
   # TODO: fazer poda
   def _minimax(self, board, depth, color, move):
     if depth == 0:
-      return heuristic(board), move
+      return self.heuristic(board), move
 
     else:
       valid_moves = self._valid_moves(board, color)
       heuristic_value = None
       best_move = None
 
+      if len(valid_moves) is 0:
+        return self.heuristic(board)
+
       for move in valid_moves:
         board_clone = self._clone_board(board)
         board_clone.play(move, color)
 
-        new_heuristic_value = self._minimax(board_clone, depth - 1, self._change_color(color))[0]
+        new_heuristic_value = self._minimax(board_clone, depth - 1, self._change_color(color), move)[0]
 
         if heuristic_value is None or not self._eval(color, heuristic_value, new_heuristic_value):
           heuristic_value = new_heuristic_value
