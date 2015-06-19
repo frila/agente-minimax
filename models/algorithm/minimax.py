@@ -7,7 +7,9 @@ class Heuristic:
   def heuristic(self, board):
     raise NotImplementedError('Dont override this class')
 
-  def eval(self, vector):
+  #Se a função eval retornar false irá trocar o valor de old_value por new_value. Se retornar valor true nao trocará
+  #old_value e new_value são valores heuristico encontrado no decorrer do cálculo
+  def eval(self, old_value, new_value):
     raise NotImplementedError('Dont override this class')
 
 
@@ -15,39 +17,38 @@ class Minimax:
   def __init__(self, me, challenger):
     self.me, self.challenger = me, challenger
 
-  def heuristic(self, board, color):
-    if color == self.me.color:
-      return self.me.heuristic(board)
-    else
-      return self.challenger.heuristic(board)
-
-  def calculate_min_or_max(self, vector_values, color):
-    if color == self.me.color:
-      return self.me.eval(vector_values)
-    else:
-      return self.challenger.eval(vector_values)
-
   def change_color(self, color):
     if color == self.me.color:
       return self.challenger.color
     else:
       return self.me.color
 
-  def children(self, board, color):
-    return board.valid_moves(color)
+  def valid_moves(self, board, color):
+    return board.valid_moves(color.color)
 
   def clone_board(self, board):
     return board.get_clone()
 
-  def minimax(self, board, depth, color):
+  # Depth não pode ser <= 0
+  # Retorna (valor_heuristico, movimento)
+  def minimax(self, board, depth, color, move):
     if depth == 0:
-      return self.heuristic(board,color)
+      return self.color.heuristic(board)
+    
     else:
-      children = self.children(board, color)
-      results = []
-      for child in children:
-        board_clone = self.clone_board(board)
-        self.board.play(child, color)
-        results[] = self.minimax(board_clone, depth-1, self.change_color(color))
-      return self.calculate_min_or_max(vector_values, color)
+      valid_moves = self.valid_moves(board, color)
+      heuristic_value = None
+      best_move = None
 
+      for move in valid_moves:
+        board_clone = self.clone_board(board)
+        self.board.play(move, color)
+        
+        new_heuristic_value = self.minimax(board_clone, depth-1, self.change_color(color))[0]
+
+        elif heuristic_value is None or not color.eval(heuristic_value, new_heuristic_value):          
+          heuristic_value = new_heuristic_value
+          best_move = move
+
+      return heuristic_value, best_move
+      
