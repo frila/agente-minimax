@@ -14,7 +14,7 @@ class Minimax:
     self.me, self.challenger = me, challenger
 
   def heuristic(self, board, color):
-    if color == self.color_me:
+    if color == self.me.color:
       return self.me.heuristic(board, color)
     else
       return self.challenger.heuristic(board, color)
