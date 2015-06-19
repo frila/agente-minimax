@@ -5,9 +5,6 @@ import random
 
 class HeuristicTestMe(Heuristic):
 
-  def __init__(self, color):
-    Heuristic.__init__(color)
-
   def heuristic(self, board, color):
     return random.randrange(-20, 20)
 
@@ -26,16 +23,7 @@ class HeuristicTestChallenger(Heuristic):
   def eval(self, old_value, new_value):
     #Lembre-se, uma heuristica tem que ser min, e o outro deve ser max
     return old_value < new_value # isso representa o min 
-    
 
-class MinimaxPlayer:
-  def __init__(self, color):
-    self.color = color
-    self.heuristic_me = HeuristicTestMe(color)
-    if color == Board.BLACK:
-      self.heuristic_challenger = HeuristicTestChallenger(Board.WHITE)
-    else:
-      self.heuristic_challenger = HeuristicTestChallenger(Board.BLACK)
-    
-  def play(self, board):
-    return 
+class TestPlayer(MinimaxPlayer):
+  def __init__(self,color):
+    MinimaxPlayer.__init__(color, 5, HeuristicTestMe(), HeuristicTestChallenger()):
