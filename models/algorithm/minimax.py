@@ -1,3 +1,5 @@
+from models.board import Board
+
 class Heuristic:
   def __init__(self, color):
     self.color = color
