@@ -2,7 +2,7 @@ class HeuristicPlayer:
   BLACK, WHITE = '@', 'o'
 
   #SETAR O VALOR DE INFINITO E DE -INFINITO
-  INF, NINF = 1000,-1000
+  INF, NINF = 1000, -1000
 
   #IMPLEMENTAR
   def evalMe(self, old_value, new_value):
@@ -15,8 +15,10 @@ class HeuristicPlayer:
     return old_value < new_value # isso representa o min
 
   #IMPLEMENTAR
-  def heuristic(self, board):
+  def heuristic(self, board, move):
     return 1
+
+
 
   def __init__(self, color):
     self.color = color
@@ -35,7 +37,7 @@ class HeuristicPlayer:
     if depth <= 0:
         raise Exception('Depth invalid value')
 
-    heuristic_value, best_move = self._minimax(board, depth, self.color_me, None)
+    heuristic_value, best_move = self._minimax(board, depth, self.color_me, None, True)
 
     if best_move == None:
         raise Exception('Depth invalid value or you do merda!!!!')
@@ -57,17 +59,14 @@ class HeuristicPlayer:
 
   def _eval(self,color, old_value, new_value):
     if color == self.color_me:
-        return self.evalMe(old_value,new_value)
+        return old_value > new_value # isso representa o max
     else:
-        return self.evalChallenge(old_value,new_value)
-  
+        return old_value < new_value # isso representa o min
 
-  # Depth nao pode ser <= 0
-  # Retorna (valor_heuristico, movimento)
-  # TODO: fazer poda
-  def _minimax(self, board, depth, color, move):
+
+  def _minimax(self, board, depth, color, move, im_max):
     if depth == 0:
-      return self.heuristic(board), move
+      return self.heuristic(board, move), move
 
     else:
       valid_moves = self._valid_moves(board, color)
@@ -75,17 +74,18 @@ class HeuristicPlayer:
       best_move = None
 
       if len(valid_moves) is 0:
-        return self.heuristic(board)
+        return self.heuristic(board, move)
 
       for move in valid_moves:
         board_clone = self._clone_board(board)
         board_clone.play(move, color)
 
-        new_heuristic_value = self._minimax(board_clone, depth - 1, self._change_color(color), move)[0]
+        new_heuristic_value = self._minimax(board_clone, depth - 1, self._change_color(color), move, not im_max)[0]
 
-        if heuristic_value is None or not self._eval(color, heuristic_value, new_heuristic_value):
+        if heuristic_value is None or im_max and heuristic_value < new_heuristic_value or not im_max and heuristic_value > new_heuristic_value:
           heuristic_value = new_heuristic_value
           best_move = move
+
 
       return heuristic_value, best_move
 
