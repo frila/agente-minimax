@@ -56,6 +56,11 @@ class BoardController:
 
     return self.white_player
 
+  def _search_class_player(self, keys):
+    for x in keys:
+      if x.lower().find('player') > 0:
+        return x
+
   def _select_player(self, color):
     players = glob.glob('./models/players/*_player.py')
     print 'Selecione um dos players abaixo para ser o jogador '+color
@@ -67,4 +72,6 @@ class BoardController:
     module_globals = {}
     execfile(players[int(player)], module_globals)
     print module_globals.keys()
-    return module_globals[module_globals.keys()[len(module_globals.keys()) - 1]](color)
+
+    #return module_globals[module_globals.keys()[len(module_globals.keys()) - 1]](color)
+    return module_globals[self._search_class_player(module_globals.keys())](color)
