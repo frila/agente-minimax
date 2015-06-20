@@ -31,13 +31,13 @@ class HeuristicPlayer:
 
   def play(self, board):
     depth = 5
-    return self.call_minimax(board, depth)
+    return self.minimax(board, depth)
 
-  def call_minimax(self, board, depth):
+  def minimax(self, board, depth):
     if depth <= 0:
         raise Exception('Depth invalid value')
 
-    heuristic_value, best_move = self._minimax(board, depth, self.color_me, None, True)
+    heuristic_value, best_move = self.function_max(board, depth, self.color_me)
 
     if best_move == None:
         raise Exception('Depth invalid value or you do merda!!!!')
@@ -64,10 +64,9 @@ class HeuristicPlayer:
         return old_value < new_value # isso representa o min
 
 
-  def _minimax(self, board, depth, color, move, im_max):
+  def function_max(self, board, depth, color, move):
     if depth == 0:
-      return self.heuristic(board, move), move
-
+      return self.heuristic(board,move), move
     else:
       valid_moves = self._valid_moves(board, color)
       heuristic_value = None
@@ -80,12 +79,35 @@ class HeuristicPlayer:
         board_clone = self._clone_board(board)
         board_clone.play(move, color)
 
-        new_heuristic_value = self._minimax(board_clone, depth - 1, self._change_color(color), move, not im_max)[0]
+        new_heuristic_value = self.function_min(board_clone, depth - 1, self._change_color(color), move)[0]
 
-        if heuristic_value is None or im_max and heuristic_value < new_heuristic_value or not im_max and heuristic_value > new_heuristic_value:
+        if heuristic_value is None and new_heuristic_value > heuristic_value:
           heuristic_value = new_heuristic_value
           best_move = move
 
+      return heuristic_value, best_move
+
+  def function_min(self, board, depth, color, move):
+    if depth == 0:
+      return self.heuristic(board,move), move
+    else:
+      valid_moves = self._valid_moves(board, color)
+      heuristic_value = None
+      best_move = None
+
+      if len(valid_moves) is 0:
+        return self.heuristic(board, move)
+
+      for move in valid_moves:
+        board_clone = self._clone_board(board)
+        board_clone.play(move, color)
+
+        new_heuristic_value = self.function_max(board_clone, depth - 1, self._change_color(color), move)[0]
+
+        if heuristic_value is None and new_heuristic_value < heuristic_value:
+          heuristic_value = new_heuristic_value
+          best_move = move
 
       return heuristic_value, best_move
+
 
