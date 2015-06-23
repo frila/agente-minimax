@@ -63,7 +63,7 @@ class HemanPlayer:
             best_move = None
 
             if len(valid_moves) is 0:
-                return self.heuristic(board, m, color)
+                return self.heuristic(board, m, color), m
 
             for move in valid_moves:
                 board_clone = board.get_clone()
@@ -96,7 +96,7 @@ class HemanPlayer:
             best_move = None
 
             if len(valid_moves) is 0:
-                return self.heuristic(board, m, color)
+                return self.heuristic(board, m, color), m
 
             for move in valid_moves:
                 board_clone = board.get_clone()
