@@ -1,21 +1,21 @@
-class HeuristicPlayer:
+class HemanPlayer:
     BLACK, WHITE = '@', 'o'
 
     # SETAR O VALOR DE INFINITO E DE -INFINITO
     INF, NINF = 1000, -1000
 
     #IMPLEMENTAR
-    def heuristic(self, board, move):
-        return 1
+    def heuristic(self, board, move, color):
+        return len(board.valid_moves(color))    
 
     def __init__(self, color):
         self.color = color
         self.color_me = color
 
-        if color == HeuristicPlayer.BLACK:
-            self.color_challenger = HeuristicPlayer.WHITE
+        if color == HemanPlayer.BLACK:
+            self.color_challenger = HemanPlayer.WHITE
         else:
-            self.color_challenger = HeuristicPlayer.BLACK
+            self.color_challenger = HemanPlayer.BLACK
 
     def play(self, board):
         depth = 5
@@ -56,14 +56,14 @@ class HeuristicPlayer:
 
     def function_max(self, board, depth, color, m, parent_max, parent_min):
         if depth == 0:
-            return self.heuristic(board, m), m
+            return self.heuristic(board, m, color), m
         else:
             valid_moves = board.valid_moves(color)
             heuristic_value = None
             best_move = None
 
             if len(valid_moves) is 0:
-                return self.heuristic(board, m)
+                return self.heuristic(board, m, color)
 
             for move in valid_moves:
                 board_clone = board.get_clone()
@@ -89,14 +89,14 @@ class HeuristicPlayer:
 
     def function_min(self, board, depth, color, m, parent_max, parent_min):
         if depth == 0:
-            return self.heuristic(board, m), m
+            return self.heuristic(board, m, color), m
         else:
             valid_moves = board.valid_moves(color)
             heuristic_value = None
             best_move = None
 
             if len(valid_moves) is 0:
-                return self.heuristic(board, m)
+                return self.heuristic(board, m, color)
 
             for move in valid_moves:
                 board_clone = board.get_clone()
