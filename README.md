@@ -30,16 +30,29 @@ Vamos rankear os estados do jogo usando uma heuristica. Para o caso do jogador p
 
 #### Player 1: Heman, O príncipe de Eternian
 
-1. Estratégia
+##### Estratégia
 
 A Estratégia do player consiste em tentar minimizar o número de jogadas possíveis do adversário. Ele faz uso de uma estratégia defensiva, impedindo que o adversário progrida no tabuleiro. Caso duas jogadas sejam avaliadas como boas, Heman fará uso daquela que renderá o maior score.
 
-2. Resultados
+##### Resultados
 
 Heman foi posto a prova contra o agente Corner, que procura sempre os cantos, gerando o seguinte resultado:
+
 ![Massacre do Heman](http://img.ctrlv.in/img/15/06/24/558a001ad7a96.png)
 
 O príncipe de Eternian batalhou contra outros players feitos pelo grupo, vencendo todos os oponentes.
+
+É importante ressaltar que esse agente **não** faz uso do algoritmo de minimax. Apenas a jogada seguinte é observada.
+
+#### Player 2: MunHá, o de vida (quase) eterna
+
+##### Estratégia
+
+Com base na seguinte tabela:
+
+![Tabela de heurísticas](http://img.ctrlv.in/img/15/06/24/558a02afc34ae.png)
+
+O algoritmo do player MunHa utiliza-se do algoritmo Minimax para maximizar a heuristica. A função heuristica soma o ponto de cada bracket no tabuleiro de sua respectiva cor e subtrai pela soma dos pontos do seu adversário ( tal ponto eh dado pela tabela ).
 
 #### Referências
 
