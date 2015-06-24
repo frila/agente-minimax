@@ -1,4 +1,4 @@
-class Gargamel:
+class MunHa:
     BLACK, WHITE = '@', 'o'
 
     # SETAR O VALOR DE INFINITO E DE -INFINITO
@@ -6,6 +6,7 @@ class Gargamel:
 
     #IMPLEMENTAR
     def heuristic(self, board, move, color):
+        other_color = self._change_color(color)
         table = [
             [120, -20, 20, 5, 5, 20, -20, 120],
             [-20, -40, -5, -5, -5, -5, -40, -20],
@@ -16,7 +17,14 @@ class Gargamel:
             [-20, -40, -5, -5, -5, -5, -40, -20],
             [120, -20, 20, 5, 5, 20, -20, 120]]
 
-        return table[move.x-1][move.y-1]
+        sum_me, sum_other = 0, 0
+        for i in range(0, len(board.board)-1):
+            for j in range(0, len(board.board[i])-1):
+                if board.board[i][j] == color:
+                    sum_me += table[i-1][j-1]
+                elif board.board[i][j] == other_color:
+                    sum_other += table[i-1][j-1]
+        return sum_me - sum_other
 
     def _can_play_in_corner(self, moves):
         vector = [ [x.x, x.y] for x in moves]
@@ -40,10 +48,10 @@ class Gargamel:
         self.color = color
         self.color_me = color
 
-        if color == Gargamel.BLACK:
-            self.color_challenger = Gargamel.WHITE
+        if color == MunHa.BLACK:
+            self.color_challenger = MunHa.WHITE
         else:
-            self.color_challenger = Gargamel.BLACK
+            self.color_challenger = MunHa.BLACK
 
     def play(self, board):
         depth = 6
